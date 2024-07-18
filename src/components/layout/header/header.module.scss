@@ -1,0 +1,143 @@
+.header {
+    height: 80px;
+    display: flex;
+    justify-content: space-evenly;
+    // overflow: hidden;
+    background-color: rgb(203, 160, 105);
+    & .login-register {
+        position: relative;
+        left: 30%;
+    }
+}
+.wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    margin: 0;
+    background-color: #03080cc4;
+    // visibility: hidden;
+}
+.modal {
+    // visibility: hidden;
+    margin: 5px auto;
+    padding: 20px 40px;
+    display: block;
+    width: 400px;
+    box-shadow: 1px 4px 4px 1px gray;
+    z-index: 100;
+    background-color: #fff;
+    &-wrapper {
+        display: inline-block;
+        border-bottom: 1px solid red;
+        position: relative;
+        background-color: #ccc;
+        &:nth-child(1),
+        &:nth-child(2) {
+            // width: 130px;
+            // height: 47.2;
+            overflow: hidden;
+        }
+        &:nth-child(1)::before {
+            content: "";
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 130px;
+            height: 4px;
+            background-color: #007bff;
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            // line-height: 47px;
+        }
+        &:nth-child(2)::before {
+            content: "";
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 184.74px;
+            height: 4px;
+            background-color: #007bff;
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            // line-height: 47px;
+        }
+        &:nth-child(1):hover::before,
+        &:nth-child(2):hover::before {
+            text-align: center;
+            // line-height: -50%;
+            transform: translateX(0);
+        }
+    }
+    &-heading-item {
+        display: inline-block;
+        margin-right: 2px;
+        padding-right: 50px;
+    }
+    &-wrapper:nth-child(1) .modal-heading-item:nth-child(1) {
+        border-right: 2px solid #ff0000;
+    }
+    &-wrapper:nth-child(2) .modal-heading-item:nth-child(1) {
+        margin-left: 8px;
+        padding-left: 7px;
+    }
+}
+
+v .hamber {
+    overflow: hidden;
+
+    & i {
+        font-size: 80px;
+        background-color: antiquewhite;
+        cursor: pointer;
+    }
+    // &:hover {
+
+    // }
+}
+.icon_open {
+    position: relative;
+    top: -22px;
+    transition: 1s ease-in all;
+}
+
+.hamber-wrapper {
+    width: 82px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 78px;
+    left: -1px;
+    cursor: pointer;
+    transition: 0.3 ease-out all;
+    &-item {
+        display: inline-block;
+        padding: 18px;
+        &:hover {
+            background-color: aquamarine;
+            transition: 1s ease-out all;
+        }
+    }
+    visibility: none;
+    &:hover {
+        display: flex;
+    }
+    & a {
+        text-decoration: none;
+    }
+}
+.hamber:hover {
+    .hamber-wrapper {
+        display: flex;
+    }
+}
+.test {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    left: 33%;
+    transform: translateX(-45%);
+}

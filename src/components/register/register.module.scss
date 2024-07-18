@@ -1,0 +1,84 @@
+.register {
+    &-heading {
+        text-decoration: none;
+        text-transform: uppercase;
+        color: darkseagreen;
+        font-weight: 500;
+    }
+    &-form {
+        margin-top: 10px;
+        width: 100%;
+    }
+    & input {
+        padding: 8px 10px;
+        outline: 1px silver;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    & label {
+        font-weight: 400;
+    }
+    & .btn {
+        width: 100%;
+
+        color: black;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 36px;
+        margin: 0 0 2em;
+        position: relative;
+        text-decoration: none;
+        text-transform: uppercase;
+        margin-top: 5px;
+        & button {
+            width: 100%;
+        }
+    }
+    & .btn-1 {
+        font-weight: 100;
+        transition: all 0.25s;
+
+        svg {
+            height: 36px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        rect {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-dasharray: 422, 0;
+            transition-delay: none;
+        }
+    }
+
+    .btn-1:hover {
+        font-weight: 900;
+        letter-spacing: 2px;
+        rect {
+            stroke-width: 5;
+            stroke-dasharray: 15, 310;
+            stroke-dashoffset: 48;
+            transition: all 1.35s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+    }
+
+    .btn-1.color-green:hover {
+        color: green;
+        rect {
+            stroke: green;
+        }
+    }
+
+    .btn-1.color-blue:hover {
+        color: blue;
+        rect {
+            stroke: blue;
+        }
+    }
+}
