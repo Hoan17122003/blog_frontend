@@ -1,0 +1,84 @@
+.wrapper {
+    width: 800px;
+}
+
+.information_basic {
+}
+.Information_UserWrite {
+}
+.Information_UserWrite_avatar {
+}
+
+.follow_icon {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+    border: 2px solid #ffffff;
+    background-color: gray;
+}
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px; /* Kích thước container */
+    height: 100px; /* Kích thước container */
+    border-radius: 50%; /* Bo tròn container */
+    overflow: hidden; /* Cắt ảnh nếu vượt quá container */
+    border: 2px solid #ffffff; /* Viền trắng cho avatar */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ cho container */
+    background-color: #f0f0f0; /* Màu nền cho container */
+}
+.Information_UserWrite_avatar_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh bao phủ toàn bộ container */
+}
+.Information_UserWrite_content {
+}
+.Information_UserWrite_content_fullname {
+}
+.Information_UserWrite_content_email {
+}
+.Article-Name {
+}
+.Articles-Content {
+}
+.comment-wrapper {
+}
+.wirte_comment {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: block;
+    background-color: aquamarine;
+    & > input {
+        width: 80%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+}
+
+.comment {
+    border: 2px solid black;
+}
+.comment_list {
+}
+.comment-wrapper {
+    display: flex;
+    background: bisque;
+}
+.comment-image-wrapper {
+    display: inline-block;
+}
+.comment-image {
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+small {
+    display: block;
+}

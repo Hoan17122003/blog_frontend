@@ -17,7 +17,9 @@ function Login() {
         try {
             const authService = new AuthService();
             const response = await authService.Login(username, password);
-            if (response.status == 201 && response.data.isActive == 0) {
+            console.log("response : ", response);
+            if (response.data?.isActive == 0) {
+                alert(response.data.message);
                 let user = {
                     username,
                     password,
@@ -26,13 +28,13 @@ function Login() {
                 localStorage.setItem("user", JSON.stringify(user));
                 window.location.href = "/validate-email";
             }
-            if (response.status == 201) {
+            if (response.status == 200 && response.data?.token) {
                 const token = response.data.token;
                 localStorage.setItem("token", JSON.stringify(token));
                 localStorage.setItem("role", JSON.stringify(response.data.role));
                 console.log(response.data.statuscode);
                 alert("đăng nhập thành công");
-                window.location.href = "/news";
+                window.location.href = "/home";
             }
         } catch (error) {
             console.error(error);

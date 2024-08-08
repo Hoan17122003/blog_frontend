@@ -3,30 +3,32 @@ import Styles from "./validate.module.scss";
 import { useEffect, useState } from "react";
 import UserService from "~/core/services/user/user.service.ts";
 import AuthService from "~/core/services/auth/auth.service.ts";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(Styles);
 function Validate() {
     const [valueToken, setValueToken] = useState("");
+    const navigation = useNavigate();
 
     useEffect(() => {
         const data = async () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const email = user.email;
+            console.log("email : ", email);
             const userService = UserService.getInstance();
-            const res = await userService.Validate();
+            await userService.ValidateEmail(email);
         };
+        data();
     }, []);
 
     const handleClick = async (e) => {
-        e.prevenDefault();
         try {
             const userService = UserService.getInstance();
-            const responseEmail = await userService.Validate();
             const response = await userService.ValidateToken(valueToken);
-            // return response and user for localstorage
             if (response.response.status === 201) {
                 alert("Xác thực thành công");
-                const authService = new AuthService();
-                const responseLogin = await authService.Login(response.user.email, response.user.password);
-                console.log("responseLogin : ", responseLogin);
+                navigation("/home");
+                // window.location.href = "/home";
             }
         } catch (error) {
             throw new Error(error);

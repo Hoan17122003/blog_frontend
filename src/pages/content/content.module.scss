@@ -1,0 +1,13 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.category-RelatedPost {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    margin-right: 21px;
+}
+hr {
+    border-top: 5px solid #0CC;
+}

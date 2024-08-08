@@ -3,14 +3,18 @@ import api from "../index";
 export default class AuthService {
     public async Login(username: string, password: string) {
         try {
-            const response = await api.post("/auth/login/local", {
-                username: username,
-                password: password,
-            });
+            const response = await api.post(
+                "/auth/login/local",
+                {
+                    username: username,
+                    password: password,
+                },
+                { withCredentials: true }
+            );
+
             return response;
         } catch (error) {
-            // console.log("error");
-            alert('thông tin đăng nhập không chính xác')
+            alert("thông tin đăng nhập không chính xác");
             throw new Error(error);
         }
     }

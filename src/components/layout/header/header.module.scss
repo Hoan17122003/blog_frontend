@@ -8,6 +8,37 @@
         position: relative;
         left: 30%;
     }
+    & .icon-header {
+        font-size: 2em;
+        margin-right: 35px;
+        &:nth-child(1) {
+            color: #0cc;
+        }
+    }
+}
+.navigation {
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    margin-bottom: 20px;
+    & .notification {
+        cursor: pointer;
+        margin-right: 20px;
+        padding: 6px;
+        border: 1px solid #fff;
+
+        &:hover {
+            background-color: rgb(52, 163, 154);
+        }
+    }
+    & .message {
+        cursor: pointer;
+        border: 1px solid #fff;
+        padding: 6px;
+        &:hover {
+            background-color: rgb(52, 163, 154);
+        }
+    }
 }
 .wrapper {
     position: fixed;
@@ -78,14 +109,16 @@
     }
     &-wrapper:nth-child(1) .modal-heading-item:nth-child(1) {
         border-right: 2px solid #ff0000;
+        cursor: pointer;
     }
     &-wrapper:nth-child(2) .modal-heading-item:nth-child(1) {
         margin-left: 8px;
         padding-left: 7px;
+        cursor: pointer;
     }
 }
 
-v .hamber {
+.hamber {
     overflow: hidden;
 
     & i {
@@ -104,18 +137,18 @@ v .hamber {
 }
 
 .hamber-wrapper {
-    width: 82px;
+    width: 200px;
     display: none;
     flex-direction: column;
     align-items: center;
     position: absolute;
     top: 78px;
-    left: -1px;
+    left: -122px;
     cursor: pointer;
     transition: 0.3 ease-out all;
     &-item {
         display: inline-block;
-        padding: 18px;
+        padding: 18px 75px;
         &:hover {
             background-color: aquamarine;
             transition: 1s ease-out all;

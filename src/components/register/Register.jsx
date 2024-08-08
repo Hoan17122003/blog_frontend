@@ -3,6 +3,7 @@ import Styles from "./register.module.scss";
 import { useRef, useState } from "react";
 import User from "~/core/services/user/User.entity.ts";
 import UserService from "~/core/services/user/user.service.ts";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(Styles);
 function Register() {
@@ -11,6 +12,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const passwordAgain = useRef();
     const fullnameRef = useRef("");
+    const navigator = useNavigate();
 
     const handleSubmit = async () => {
         if (password != passwordAgain.current.value) {
@@ -24,10 +26,10 @@ function Register() {
         );
         const userService = UserService.getInstance();
         const flag = await userService.Register(userEntity);
-        console.log("flag : ", flag);
         if (flag.status === 201) {
+            console.log("flag : ", flag);
             localStorage.setItem("user", JSON.stringify(flag.data));
-            navigator("/validate-email");
+            window.location.href = "/validate-email";
         }
     };
 
@@ -68,7 +70,7 @@ function Register() {
                             <svg>
                                 <rect x="0" y="0" fill="none" width="100%" height="100%" />
                             </svg>
-                            đăng nhập
+                            đăng kí
                         </button>
                     </div>
                 </div>

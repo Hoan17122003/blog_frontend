@@ -1,13 +1,23 @@
 import { Fragment } from "react";
 import "./App.css";
-import { Routes, BrowserRouter as Router, Route } from "react-router-dom";
-import { publicRoutes } from "~/routes/index.router.ts";
+import Cookies from "js-cookie";
+import { Routes, BrowserRouter as Router, Route, Navigate } from "react-router-dom";
+import { publicRoutes, PublicRoute, PrivateRoute, privateRoutes } from "~/routes/index.router";
 
 import DefaultLayout from "./components/layout/defaultlayout/DefaultLayout";
 
 // import DefaultLayOut from "./components/layout/DefaultLayout";
 
 function App() {
+
+    const isAuthenticated = () => {
+        const token = JSON.parse(localStorage.getItem('token'));
+        const userId = Cookies.get('UserId');
+        console.log('token : ', token, userId)
+        if (!token && !userId) return false;
+        return true; // For testing purposes, always returns true
+    };
+
     return (
         <Router>
             <div className="App">
@@ -17,7 +27,7 @@ function App() {
                         let Layout = DefaultLayout;
                         if (route.layout) {
                             Layout = route.layout;
-                        } else if (route.layout === null) {
+                        } else if ((route.layout === null)) {
                             Layout = Fragment;
                         }
 
@@ -33,6 +43,30 @@ function App() {
                             />
                         );
                     })}
+                    {/* {privateRoutes.map((route, index) => {
+                        const Page = route.component;
+                        let Layout = DefaultLayout;
+                        if (route.layout) {
+                            Layout = route.layout;
+                        } else if ((route.layout === null)) {
+                            Layout = Fragment;
+                        }
+                        return (
+                            <Route
+                                element={
+                                    isAuthenticated() ? (
+                                        (
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        )
+                                    ) : (
+                                        <Navigate to="/" />
+                                    )
+                                }
+                            />
+                        )
+                    })} */}
                 </Routes>
             </div>
         </Router>

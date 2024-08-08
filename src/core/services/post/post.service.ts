@@ -17,7 +17,7 @@ export class PostSerivce {
     public async GetPostList(pageSize: number, pageNumber: number) {
         try {
             // Post[];
-            const response = await api.get(`localhost:80/post/all?$q=${pageNumber}&p=${pageSize}`);
+            const response = await api.get(`/post/all?q=${pageNumber}&p=${pageSize}`);
             return response;
         } catch (error) {
             return error;
@@ -26,7 +26,8 @@ export class PostSerivce {
 
     public async GetPostDetail(post_id: number) {
         try {
-            const response = await api.get(`localhost:80/post/detail/${post_id}`);
+            const response = await api.get(`/post/detail/${post_id}`);
+            console.log(response);
             return response;
         } catch (error) {
             throw new Error(error);
@@ -35,23 +36,54 @@ export class PostSerivce {
 
     public async CreatePost(postDTO: Post) {
         try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const access_token = token["access_token"];
+            console.log("accesToken : ", access_token);
+            console.log("postDTO : ", postDTO);
             const response = await api.post(
-                `localhost:80/post/create`,
+                `/post/create`,
                 {
                     post: {
-                        ...postDTO,
+                        post_name: postDTO.post_name,
+                        post_content: postDTO.post_content,
+                        category_name: postDTO.category_name,
                     },
                 },
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer" + localStorage.getItem("token"),
+                        Authorization: `Bearer ${access_token}`,
                     },
                 }
             );
+            return response;
         } catch (error) {
             throw new Error(error);
             // return alert(error);
+        }
+    }
+    public async PostImage(DataImages) {
+        try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const access_token = token["access_token"];
+            const response = await api.post(
+                "/post/image",
+                // {
+                //     images: DataImages,
+                //     positions: Positions,
+                //     post_id: postId,
+                // },
+                DataImages,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            return response;
+        } catch (error) {
+            throw new Error(error);
         }
     }
 
