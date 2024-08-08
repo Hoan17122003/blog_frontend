@@ -1,12 +1,14 @@
 import Footer from "~/components/footer/Footer";
 import Header from "../header/header";
+import Styles from "./defaultlayout.module.scss";
+import classNames from "classnames/bind";
 
-function DefaultLayout() {
+const cx = classNames.bind(Styles);
+function DefaultLayout({ children }) {
     return (
         <>
             <Header />
-            <h1>DefaultLayOutPage</h1>
-            <Footer />
+            <div className={cx("content")}>{children}</div>
         </>
     );
 }
