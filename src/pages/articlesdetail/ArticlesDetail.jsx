@@ -10,6 +10,8 @@ import UserService from "~/core/services/user/user.service.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
+import Image from "~/components/images/Image";
+
 export const PostIdContext = createContext();
 
 const cx = classNames.bind(Styles);
@@ -39,11 +41,9 @@ function ArticlesDetail({ onData }) {
     }, []);
     const handleFollow = () => {
         const UserId = Cookies.get("UserId");
-        console.log("UserId : ", UserId);
         if (UserId) {
             const userService = UserService.getInstance();
             const response = userService.Follow(userWrite.user_id);
-            console.log(response);
             alert("theo dõi người dùng thành công");
         } else {
             alert("Vui lòng đăng nhập để theo dõi người dùng");
@@ -54,13 +54,12 @@ function ArticlesDetail({ onData }) {
     };
     const follow = () => {
         const userId = Cookies.get("UserId");
-        console.log("userId : ", userId);
         if (userId === userWrite.user_id) return <></>;
         if (isFollow) {
             return <div onClick={handleUnFollow}>huỷ theo dõi</div>;
         }
         return (
-            <div className={cx('follow_icon')} onClick={handleFollow}>
+            <div className={cx("follow_icon")} onClick={handleFollow}>
                 <FontAwesomeIcon icon={faPlus} />
             </div>
         );

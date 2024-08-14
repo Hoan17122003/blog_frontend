@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classNames from "classnames/bind";
 
 import { PostSerivce } from "~/core/services/post/post.service.ts";
-import Image from "~/components/image/Image";
+import Image from "~/components/images/Image";
 import Styles from "./home.module.scss";
 
 const cx = classNames.bind(Styles);
@@ -13,6 +13,7 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [postsPerPage] = useState(10);
+    // const [count, setCount] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,6 +27,15 @@ function Home() {
         };
         listPost();
     }, [currentPage]);
+    // const countCallback = useCallback(() => {
+    //     const data = async () => {
+    //         const postService = PostSerivce.GetInstance();
+    //         const response = await postService.GetPostCount();
+    //         console.log("data : ", response.data);
+    //         setCount(response.data);
+    //     };
+    //     data();
+    // }, []);
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -65,6 +75,9 @@ function Home() {
                                             src={`http://localhost:8080/${element.images[0]?.url || null}`}
                                             alt="Image"
                                             className="img-fluid"
+                                            style={{
+                                                height: "400px",
+                                            }}
                                         />
                                     </div>
                                     <span className="position-absolute tm-new-badge">New</span>
@@ -85,7 +98,7 @@ function Home() {
                                 <div className={cx("tag")}>
                                     <span>
                                         {element.tag.map((element, index) => (
-                                            <Link key={index} to={`/tag/@${element.tag_name}`}>
+                                            <Link key={index} to={`/tag/${element.tag_name}`}>
                                                 #{element.tag_name}
                                             </Link>
                                         ))}

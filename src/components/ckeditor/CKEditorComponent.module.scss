@@ -2,3 +2,14 @@ figure {
     max-width: 100px;
     min-width: 50px;
 }
+.header-articles {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    & input {
+        margin-bottom: 2px;
+    }
+    & select {
+        margin-bottom: 15px;
+    }
+}

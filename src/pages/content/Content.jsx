@@ -22,14 +22,14 @@ function Content() {
                 <div className={cx("category")}>
                     <hr />
                     <h2>Category</h2>
-                    <Link to={`/${category.category_name}`} className={cx("category-list")}>
+                    <Link to={`/category/${category.category_name}`} className={cx("category-list")}>
                         {category.category_name}
                     </Link>
                     <hr />
                     <h2>Tag</h2>
                     <div>
                         {tag.map((element) => {
-                            return <Link to={`/${element.tag_name}`}>{element.tag_name}</Link>;
+                            return <Link to={`/tag/${element.tag_name}`}>{element.tag_name}</Link>;
                         })}
                     </div>
                 </div>

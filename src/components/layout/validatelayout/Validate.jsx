@@ -14,7 +14,6 @@ function Validate() {
         const data = async () => {
             const user = JSON.parse(localStorage.getItem("user"));
             const email = user.email;
-            console.log("email : ", email);
             const userService = UserService.getInstance();
             await userService.ValidateEmail(email);
         };

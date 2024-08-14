@@ -41,11 +41,15 @@ function Header() {
     };
 
     const handleLogout = () => {
-        const authService = new AuthService();
-        authService.Logout();
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        window.location.reload();
+        const fetchData = async () => {
+            const authService = new AuthService();
+            const access_token = JSON.parse(localStorage.getItem("token")).access_token;
+            await authService.Logout(access_token);
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            window.location.reload();
+        };
+        fetchData();
     };
     const token = localStorage.getItem("token");
 
@@ -159,7 +163,12 @@ function Header() {
                                         onClick={() => setActive("Profile")}
                                         className={`tm-nav-item ${isActive == "Profile" ? "active" : 0}`}
                                     >
-                                        <Link to="/profile" className={`tm-nav-link`}>
+                                        <Link
+                                            onClick={() => {
+                                                window.location.href = "/profile";
+                                            }}
+                                            className={`tm-nav-link`}
+                                        >
                                             <FontAwesomeIcon className={cx("icon-header")} icon={faCircleXmark} />
                                             Trang cá nhân
                                         </Link>

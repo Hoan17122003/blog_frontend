@@ -3,6 +3,8 @@ import Header from "../header/header";
 import Styles from "./defaultlayout.module.scss";
 import classNames from "classnames/bind";
 
+import AuthService from "~/core/services/auth/auth.service.ts";
+import Cookies from "js-cookie";
 const cx = classNames.bind(Styles);
 function DefaultLayout({ children }) {
     return (

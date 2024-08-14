@@ -1,44 +1,47 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import classNames from "classnames/bind";
 
 import { PostSerivce } from "~/core/services/post/post.service.ts";
 import Image from "~/components/images/Image";
-import UserService from "~/core/services/user/user.service.ts";
-import Styles from "./following.module.scss";
+import Styles from "./filter.module.scss";
 
 const cx = classNames.bind(Styles);
 
-function Following() {
+function Filter() {
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [postsPerPage] = useState(10);
-    // const [count, setCount] = useState(null);
+    const [filter, setFilter] = useState("");
     const navigate = useNavigate();
+    const { CategoryName } = useParams();
+    const { TagName } = useParams();
 
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        const url = window.location.href;
+        const itemURL = url.split("/");
+        let filterUrl = itemURL[itemURL.length - 2];
+        setFilter(filterUrl);
+
+        const postService = PostSerivce.GetInstance();
+        let post;
+
+        if (filterUrl === "tag") {
+            post = await postService.GetPostList(10, currentPage, undefined, TagName);
+        } else if (filterUrl === "category") {
+            post = await postService.GetPostList(10, currentPage, CategoryName, undefined);
+        }
+
+        setLoading(false);
+        if (post && post.status === 200) {
+            setPosts(post.data);
+        }
+    }, [CategoryName, TagName, currentPage]);
     useEffect(() => {
-        const listPost = async () => {
-            const access_token = JSON.parse(localStorage.getItem("token")).access_token;
-            const userService = UserService.getInstance();
-            const post = await userService.GetArticlesFollowing(10, currentPage, access_token);
-            console.log(post.data.data);
-            setLoading(false);
-            if (post.status === 200) {
-                setPosts(post.data.data);
-            }
-        };
-        listPost();
-    }, [currentPage]);
-    // const countCallback = useCallback(() => {
-    //     const data = async () => {
-    //         const postService = PostSerivce.GetInstance();
-    //         const response = await postService.GetPostCount();
-    //         console.log("data : ", response.data);
-    //         setCount(response.data);
-    //     };
-    //     data();
-    // }, []);
+        fetchData();
+    }, [fetchData]);
 
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -59,13 +62,15 @@ function Following() {
 
     return (
         <>
+            <h3>{filter === "tag" ? `Thẻ : #${TagName}` : `Danh Mục : ${CategoryName}`} </h3>
             <div className="row tm-row">
                 {
                     // posts &
-                    posts.map((user, index) => {
-                        console.log("user : ", user);
-                        return user.posts.map((element, index) => {
-                            console.log("element : ", element);
+                    posts.length > 0 ? (
+                        posts.map((element, index) => {
+                            if (element.images.length > 0) {
+                                // console.log("url : ", element.images[0].url);
+                            }
                             return (
                                 <article key={index} className="col-12 col-md-6 tm-post">
                                     <hr className="tm-hr-primary" />
@@ -92,7 +97,10 @@ function Following() {
                                     <div className="d-flex justify-content-between tm-pt-45">
                                         <span className="tm-color-primary">
                                             Danh Mục:{" "}
-                                            <Link to={`/category/${element.categories.category_name}`}>
+                                            <Link
+                                                onClick={() => setFilter("category")}
+                                                to={`/category/${element.categories.category_name}`}
+                                            >
                                                 {element.categories.category_name}
                                             </Link>
                                         </span>
@@ -103,36 +111,41 @@ function Following() {
                                     <div className={cx("tag")}>
                                         <span>
                                             {element.tag.map((element, index) => (
-                                                <Link key={index} to={`/tag/${element.tag_name}`}>
+                                                <Link
+                                                    onClick={() => setFilter("tag")}
+                                                    key={index}
+                                                    to={`/tag/${element.tag_name}`}
+                                                >
                                                     #{element.tag_name}
                                                 </Link>
                                             ))}
                                         </span>
                                     </div>
                                     <hr />
-                                    {/* user */}
                                     <div className="d-flex justify-content-between">
                                         <span className={cx("wrapper")}>
-                                            <Link to={`/profile/${user["user_id"]}`}>
+                                            <Link to={`/profile/${element["user_id"]}`}>
                                                 <img
                                                     className={cx("wrapper-img")}
-                                                    src={`http://localhost:8080/${user.avatar || " "}`}
+                                                    src={`http://localhost:8080/${element["user_wirte"].avatar || " "}`}
                                                     alt="images"
                                                 />
                                             </Link>
                                         </span>
-                                        <span className={cx("lineheight")}>{user.fullname}</span>
+                                        <span className={cx("lineheight")}>{element["user_wirte"].fullname}</span>
                                         <span
                                             className={cx("email", "lineheight")}
-                                            onClick={() => navigate(`/profile/${user["user_id"]}`)}
+                                            onClick={() => navigate(`/profile/${element["user_id"]}`)}
                                         >
-                                            {user.email}
+                                            {element["user_wirte"].email}
                                         </span>
                                     </div>
                                 </article>
                             );
-                        });
-                    })
+                        })
+                    ) : (
+                        <span>chưa có bài viết nào được đăng</span>
+                    )
                 }
                 <div className="row tm-row tm-mt-100 tm-mb-75">
                     <div className="tm-prev-next-wrapper">
@@ -191,4 +204,4 @@ function Following() {
     );
 }
 
-export default Following;
+export default Filter;

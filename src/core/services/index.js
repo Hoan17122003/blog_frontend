@@ -10,6 +10,5 @@ const api = axios.create({
 export default api;
 
 export const searchAPI = (searchValue, fillter, currentPage) => {
-    console.log('searchValue : ', searchValue)
     return api.get(`/search?q=${searchValue}&p=${fillter}&PageNumber=${currentPage}&PageSize=3`);
 }

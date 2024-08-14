@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import classNames from "classnames/bind";
 import styles from "./CKEditorComponent.module.scss";
 import { PostSerivce } from "~/core/services/post/post.service.ts";
 import { Post } from "~/core/services/post/Post.entity.ts";
+import CategoryService from "~/core/services/category/Category.service.ts";
 
 const cx = classNames.bind(styles);
 
@@ -15,11 +16,20 @@ const CkEditorComponent = () => {
     const [positionImage, setPositionImage] = useState(1);
     const postNameRef = useRef(null);
     const categoryRef = useRef(null);
+    const tagRef = useRef(null);
+    const [categoryName, setCategoryName] = useState([]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchData = async () => {
             const data = await fetchSomeData();
             setContent(data);
+            const categoryService = new CategoryService();
+            const access_token = JSON.parse(localStorage.getItem("token")).access_token;
+            const response = await categoryService.GetAllCategory(access_token);
+            if (response.status == 200 || response.status == 201) {
+                const value = response.data.data.map((element) => element.category_name);
+                setCategoryName(value);
+            }
         };
 
         fetchData();
@@ -39,7 +49,6 @@ const CkEditorComponent = () => {
                 new Promise((resolve, reject) => {
                     loader.file.then(async (file) => {
                         const url = URL.createObjectURL(file);
-                        console.log("file : ", file);
                         setTempImages((prevTempImages) => {
                             return [...prevTempImages, { [url]: file, positionImage }];
                         });
@@ -59,35 +68,37 @@ const CkEditorComponent = () => {
 
     const handleSubmit = async () => {
         const postSerive = PostSerivce.GetInstance();
-        const post = new Post(postNameRef.current.value, content, categoryRef.current.value);
+        const post = new Post(postNameRef.current.value, content, categoryRef.current.value, tagRef.current.value);
         const postEntity = await postSerive.CreatePost(post);
         const postId = postEntity.data["postId"];
-        const data = new Map();
-        tempImages.forEach((imgObj, index) => {
-            let key;
-            for (let element in imgObj) {
-                if (element != "positionImage") {
-                    key = element;
+        if (tempImages.length > 0) {
+            const data = new Map();
+            tempImages.forEach((imgObj, index) => {
+                let key;
+                for (let element in imgObj) {
+                    if (element != "positionImage") {
+                        key = element;
+                    }
                 }
-            }
-            data.set(imgObj["positionImage"], imgObj[key]);
-        });
-        console.log("tempImages : ", tempImages);
-        const images = Array.from(data.values());
-        const position = Array.from(data.keys());
-        const formDataImages = new FormData();
+                data.set(imgObj["positionImage"], imgObj[key]);
+            });
+            const images = Array.from(data.values());
+            const position = Array.from(data.keys());
+            const formDataImages = new FormData();
 
-        images.forEach((element) => {
-            formDataImages.append("images", element);
-        });
-        formDataImages.append("positions", position);
-        formDataImages.append("post_id", postId);
-        const imageCheck = await postSerive.PostImage(formDataImages);
-        if (imageCheck.status === 200 || imageCheck.status === 201) {
-            alert('Tạo bài viết thành công, chờ duyệt')
-            return window.location.reload();
+            images.forEach((element) => {
+                formDataImages.append("images", element);
+            });
+            formDataImages.append("positions", position);
+            formDataImages.append("post_id", postId);
+            const imageCheck = await postSerive.PostImage(formDataImages);
+            if (imageCheck.status === 200 || imageCheck.status === 201) {
+                alert("Tạo bài viết thành công, chờ duyệt");
+                return window.location.reload();
+            }
         }
-        console.log("imageCheck", imageCheck.data, " ", imageCheck.status);
+        alert("tạo bài viét thành công, chờ duyệt");
+        window.location.reload();
     };
 
     const handleEditorChange = (event, editor) => {
@@ -105,10 +116,7 @@ const CkEditorComponent = () => {
         Array.from(images).forEach((img, index) => {
             const src = img.src;
             if (src) {
-                console.log("tempImage : ", tempImages);
-                console.log("position : ", positionImage);
                 if (tempImages.length > 0) {
-                    console.log("hehehe");
                     tempImages[tempImages.length - 1]["positionImage"] = positionImage;
                 }
                 img.outerHTML = `[image[${newPosition}]]`;
@@ -135,10 +143,22 @@ const CkEditorComponent = () => {
 
     return (
         <div className="editor-container">
-            <label htmlFor="post_name">Tên bài viết</label>
-            <input id="post_name" ref={postNameRef} type="text" placeholder="Tên bài viết" />
-            <label htmlFor="category">Danh Mục</label>
-            <input ref={categoryRef} type="text" placeholder="danh mục bài viết" id="category" />
+            <div className={cx("header-articles")}>
+                <label htmlFor="post_name">Tên bài viết</label>
+                <input id="post_name" ref={postNameRef} type="text" placeholder="Tên bài viết" />
+
+                <label htmlFor="category">Danh Mục</label>
+                <select ref={categoryRef} id="category">
+                    {categoryName.map((element, index) => {
+                        return (
+                            <option key={index} value={`${element}`}>
+                                {element}
+                            </option>
+                        );
+                    })}
+                </select>
+                <input ref={tagRef} type="text" placeholder="Gắn thẻ bài viết của bạn " id="tag" />
+            </div>
             <h4>Nội dung bài viết :</h4>
             <CKEditor
                 editor={ClassicEditor}
@@ -184,8 +204,8 @@ const CkEditorComponent = () => {
                 data={content}
                 onChange={handleEditorChange}
             />
-            <h2>Raw Content</h2>
-            <pre>{content}</pre>
+            {/* <h2>Raw Content</h2>
+            <pre>{content}</pre> */}
             <h2>Image URLs</h2>
             <ul>
                 {imageUrls.map((url, index) => (

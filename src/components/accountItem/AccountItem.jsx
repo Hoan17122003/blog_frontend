@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import Styles from "./AccountItem.module.scss";
-import Image from "~/components/image/Image.jsx";
+import Image from "~/components/images/Image.jsx";
 import { Fragment, memo } from "react";
 
 const cx = classNames.bind(Styles);

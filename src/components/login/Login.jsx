@@ -17,7 +17,6 @@ function Login() {
         try {
             const authService = new AuthService();
             const response = await authService.Login(username, password);
-            console.log("response : ", response);
             if (response.data?.isActive == 0) {
                 alert(response.data.message);
                 let user = {
@@ -32,7 +31,6 @@ function Login() {
                 const token = response.data.token;
                 localStorage.setItem("token", JSON.stringify(token));
                 localStorage.setItem("role", JSON.stringify(response.data.role));
-                console.log(response.data.statuscode);
                 alert("đăng nhập thành công");
                 window.location.href = "/home";
             }

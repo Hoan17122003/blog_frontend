@@ -95,7 +95,6 @@ function Search() {
             return;
         }
         setLoading(true);
-        console.log("filter : ", filter);
 
         debouncedSearch(searchValue);
     }, [searchValue, filter]);

@@ -23,7 +23,6 @@ export default class UserService {
                     fullname: userDTO.getFullname(),
                 },
             });
-            console.log("response : ", response.statusText);
             return response;
         } catch (error) {
             throw new Error(error);
@@ -94,15 +93,23 @@ export default class UserService {
         }
     }
 
+    public async MeProfile(access_token: string) {
+        try {
+            const response = await api.get("/user/profile", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
     //[Get]
-    public async Profile(userId: number) {
+    public async ProfileUserId(userId: number) {
         try {
             const response = await api.get(`/user/profile/${userId}`);
-            console.log("response 1231 : ", response);
             const status = response.status;
-            if (status != 200 || status != 201) {
-                return false;
-            }
             return {
                 status,
                 data: response.data,
@@ -110,5 +117,48 @@ export default class UserService {
         } catch (error) {
             throw new Error(error);
         }
+    }
+
+    public async GetArticlesFollowing(pageSize: number, pageNumber: number, access_token: string) {
+        try {
+            const response = await api.get(`/user/FollowingArticles?pn=${pageNumber}&ps=${pageSize}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+    public async GetMeProfile(access_token: string) {
+        try {
+            const response = await api.get("/user/me", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    public async UploadAvatar(file: FormData, access_token: string) {
+        try {
+            const response = await api.put(
+                "/user/avatar",
+                {
+                    avatar: file,
+                },
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                }
+            );
+            return response;
+        } catch (error) {}
     }
 }

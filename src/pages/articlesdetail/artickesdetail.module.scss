@@ -42,6 +42,10 @@
 .Article-Name {
 }
 .Articles-Content {
+    overflow: hidden;
+    & > div > p > img {
+        width: 800px;
+    }
 }
 .comment-wrapper {
 }

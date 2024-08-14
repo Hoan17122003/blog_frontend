@@ -27,7 +27,6 @@ function Register() {
         const userService = UserService.getInstance();
         const flag = await userService.Register(userEntity);
         if (flag.status === 201) {
-            console.log("flag : ", flag);
             localStorage.setItem("user", JSON.stringify(flag.data));
             window.location.href = "/validate-email";
         }
