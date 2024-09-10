@@ -1,12 +1,16 @@
 import Footer from "~/components/footer/Footer";
 import Header from "../header/header";
+import Styles from "./defaultlayout.module.scss";
+import classNames from "classnames/bind";
 
-function DefaultLayout() {
+import AuthService from "~/core/services/auth/auth.service.ts";
+import Cookies from "js-cookie";
+const cx = classNames.bind(Styles);
+function DefaultLayout({ children }) {
     return (
         <>
             <Header />
-            <h1>DefaultLayOutPage</h1>
-            <Footer />
+            <div className={cx("content")}>{children}</div>
         </>
     );
 }

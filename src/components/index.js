@@ -1,0 +1,1 @@
+export { default as Images } from "~/components/images/Image"

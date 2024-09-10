@@ -1,0 +1,103 @@
+.profile {
+    & .information_user {
+        & .image-wrapper {
+            & > img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 50%;
+            }
+        }
+    }
+    & .list-post {
+        margin-top: 10%;
+
+        & .list-post-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            justify-items: center;
+            margin-bottom: 20%;
+            & .list-post-item {
+                display: flex;
+                margin-bottom: 45px;
+                border: 2px solid black;
+                & .post_image_wrapper {
+                    display: inline-block;
+                    border: 2px solid black;
+                    margin-right: 4px;
+                    & > img {
+                        width: 150px;
+                        height: 120px;
+                    }
+                }
+                & .post_content {
+                    width: calc(100% - 150px);
+                    border-right: 2px;
+                    & .post_name {
+                        display: inline-block;
+                    }
+                }
+                & .post_date {
+                    font-size: 10px;
+                }
+                .icon-wrapper {
+                    cursor: pointer;
+                    padding: 20px;
+                    position: relative;
+                    & .icon {
+                        font-size: 25px;
+                    }
+                    & .icon:hover {
+                        color: #0cc;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.nav {
+    visibility: hidden;
+    position: absolute;
+    right: 0;
+    transform: translate(0, 115px);
+    background-color: #0cc;
+    padding: 4px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    & > a {
+        color: white;
+        text-decoration: none;
+    }
+    & ul li {
+        list-style-type: none;
+        padding: 5px;
+        & > a {
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+        }
+        &:hover {
+            background-color: #fff;
+            & >a {
+                color: black;
+            }
+        }
+    }
+}
+// .hiden {
+//     visibility: visible;
+// }
+
+.modal {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%s);
+}

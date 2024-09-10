@@ -15,7 +15,6 @@ export default class UserService {
 
     public async Register(userDTO: User) {
         try {
-            console.log("user : ", userDTO);
             const response = await api.post(`/user/create-account/local`, {
                 user: {
                     username: userDTO.getUsername(),
@@ -24,7 +23,6 @@ export default class UserService {
                     fullname: userDTO.getFullname(),
                 },
             });
-            console.log("response : ", response.statusText);
             return response;
         } catch (error) {
             throw new Error(error);
@@ -34,10 +32,9 @@ export default class UserService {
     public async ValidateEmail(email: string) {
         try {
             const response = await api.post("/user/sent-validateToken", {
-                email: email,
+                NameEmail: email,
                 subject: "Xác thực tài khoản",
             });
-            console.log("response : ", response);
             localStorage.setItem("validateToken", JSON.stringify(response.data.validateToken));
             return response;
         } catch (error) {
@@ -61,7 +58,10 @@ export default class UserService {
                     },
                 }
             );
-            localStorage.remomve("validateToken");
+            if (response.status == 201) {
+                localStorage.removeItem("validateToken");
+                localStorage.removeItem("user");
+            }
             return {
                 response,
                 user,
@@ -69,5 +69,96 @@ export default class UserService {
         } catch (error) {
             throw new Error(error);
         }
+    }
+
+    public async Follow(userIdFollow: number) {
+        try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const access_token = token["access_token"];
+            const response = await api.post(
+                `/user/follow`,
+                {
+                    userId: userIdFollow,
+                },
+                {
+                    headers: {
+                        // "Content-Type": "application/json",
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                }
+            );
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    public async MeProfile(access_token: string) {
+        try {
+            const response = await api.get("/user/profile", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+    //[Get]
+    public async ProfileUserId(userId: number) {
+        try {
+            const response = await api.get(`/user/profile/${userId}`);
+            const status = response.status;
+            return {
+                status,
+                data: response.data,
+            };
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    public async GetArticlesFollowing(pageSize: number, pageNumber: number, access_token: string) {
+        try {
+            const response = await api.get(`/user/FollowingArticles?pn=${pageNumber}&ps=${pageSize}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+    public async GetMeProfile(access_token: string) {
+        try {
+            const response = await api.get("/user/me", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    public async UploadAvatar(file: FormData, access_token: string) {
+        try {
+            const response = await api.put(
+                "/user/avatar",
+                {
+                    avatar: file,
+                },
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                }
+            );
+            return response;
+        } catch (error) {}
     }
 }

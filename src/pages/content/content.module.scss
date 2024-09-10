@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.category-RelatedPost {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    margin-right: 21px;
+    & .category > div {
+        display: inline-block;
+        background-color: #6c757d;
+        & > a {
+            color: #fff;
+            padding: 5px 10px;
+        }
+    }
+}
+hr {
+    border-top: 5px solid #0cc;
+}

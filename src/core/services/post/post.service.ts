@@ -14,19 +14,42 @@ export class PostSerivce {
     }
 
     // Get Post pageNumber to pageSize pagnation
-    public async GetPostList(pageSize: number, pageNumber: number) {
+    public async GetPostList(pageSize: number, pageNumber: number, categoryName?: string, tagName?: string) {
         try {
             // Post[];
-            const response = await api.get(`localhost:80/post/all?$q=${pageNumber}&p=${pageSize}`);
+            const response = await api.get(
+                `/post/all?q=${pageNumber}&p=${pageSize}&categoryName=${categoryName}&tagName=${tagName}`
+            );
             return response;
         } catch (error) {
             return error;
         }
     }
 
+    public async GetCountPost() {
+        try {
+            const response = await api.get("/post/count");
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     public async GetPostDetail(post_id: number) {
         try {
-            const response = await api.get(`localhost:80/post/detail/${post_id}`);
+            const response = await api.get(`/post/detail/${post_id}`);
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+    public async GetPostFollow(pageNumber: number, pageSize: number, access_token: string) {
+        try {
+            const response = await api.get(`/post/following-articles?pn=${pageNumber}&ps=${pageSize}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
             return response;
         } catch (error) {
             throw new Error(error);
@@ -35,27 +58,58 @@ export class PostSerivce {
 
     public async CreatePost(postDTO: Post) {
         try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const access_token = token["access_token"];
+
             const response = await api.post(
-                `localhost:80/post/create`,
+                `/post/create`,
                 {
                     post: {
-                        ...postDTO,
+                        post_name: postDTO.post_name,
+                        post_content: postDTO.post_content,
+                        category_name: postDTO.category_name,
+                        tag_name: postDTO.tag_name,
                     },
                 },
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer" + localStorage.getItem("token"),
+                        Authorization: `Bearer ${access_token}`,
                     },
                 }
             );
+            return response;
         } catch (error) {
             throw new Error(error);
             // return alert(error);
         }
     }
+    public async PostImage(DataImages) {
+        try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const access_token = token["access_token"];
+            const response = await api.post(
+                "/post/image",
+                // {
+                //     images: DataImages,
+                //     positions: Positions,
+                //     post_id: postId,
+                // },
+                DataImages,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
-    public async DeletePost(post_ids: number[], access_token: string) {
+    public async RemoveArticle(post_ids: number[], access_token: string) {
         try {
             const response = await api.delete(`/post/delete/${post_ids}`, {
                 headers: {
